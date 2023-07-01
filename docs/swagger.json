@@ -1,0 +1,373 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "My API",
+    "version": "1.0.0",
+    "description": "Описание вашего API"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/books": {
+      "get": {
+        "summary": "Получить список книг",
+        "tags": ["Books"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Book"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Неавторизованный запрос"
+          }
+        }
+      },
+      "post": {
+        "summary": "Создать новую книгу",
+        "tags": ["Books"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Данные для создания книги",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Book"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Книга успешно создана",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Неверный запрос"
+          },
+          "401": {
+            "description": "Неавторизованный запрос"
+          }
+        }
+      }
+    },
+
+    "/books/{id}": {
+      "delete": {
+        "summary": "Удалить книгу",
+        "tags": ["Books"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный ответ"
+          },
+          "401": {
+            "description": "Ошибка авторизации"
+          },
+          "404": {
+            "description": "Книга не найдена"
+          }
+        }
+      },
+      "put": {
+        "summary": "Изменить книгу",
+        "tags": ["Books"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Данные для изменения книги",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BookUpdate"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный ответ"
+          },
+          "400": {
+            "description": "Неверный запрос"
+          },
+          "401": {
+            "description": "Ошибка авторизации"
+          },
+          "404": {
+            "description": "Книга не найдена"
+          }
+        }
+      }
+    },
+
+    "/books/user": {
+      "post": {
+        "summary": "Получить список всех книг Юзера",
+        "tags": ["Books"],
+        "requestBody": {
+          "description": "Данные для получения списка книг Юзера",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUserBook"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Book"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Ошибка авторизации"
+          }
+        }
+      }
+    },
+    "/books/manager": {
+      "post": {
+        "summary": "Получить список всех книг Менеджера(подконтрольных юзеров)",
+        "tags": ["Books"],
+        "requestBody": {
+          "description": "Данные для получения списка книг Менеджера",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetManagerBook"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Book"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Ошибка авторизации"
+          }
+        }
+      }
+    },
+
+
+
+
+
+
+    "/auth/register": {
+      "post": {
+        "summary": "Регистрация нового пользователя",
+        "tags": ["Auth"],
+        "requestBody": {
+          "description": "Данные для регистрации",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешная регистрация"
+          },
+          "400": {
+            "description": "Некорректный запрос"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Аутентификация пользователя",
+        "tags": ["Auth"],
+        "requestBody": {
+          "description": "Данные для аутентификации",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешная аутентификация"
+          },
+          "401": {
+            "description": "Неправильный пароль"
+          },
+          "404": {
+            "description": "Пользователь не найден"
+          }
+        }
+      }
+    }
+},
+
+  "components": {
+
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+
+    "schemas": {
+      "Book": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "GetUserBook": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer"
+          }
+        }
+      },
+      "GetManagerBook": {
+        "type": "object",
+        "properties": {
+          "managerId": {
+            "type": "integer"
+          }
+        }
+      },
+      "BookUpdate": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+
+
+
+
+      "User": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          }
+        },
+        "required": ["name", "password"]
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
+}
